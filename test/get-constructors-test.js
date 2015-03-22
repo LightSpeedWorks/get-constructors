@@ -9,7 +9,6 @@
   // module.paths.unshift(require('path').resolve(__dirname, '..'));
   var constructors = require('../get-constructors');
   constructors.extendObject();
-  constructors.extendFunction();
 
   var getProto = Object.getPrototypeOf ? Object.getPrototypeOf :
     function getProto(obj) { return obj.__proto__ };

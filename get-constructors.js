@@ -28,16 +28,10 @@
     return classes;
   }
 
-  constructors.extendObject = function extendObject() {
+  constructors.extendObject = function extendObject(Class) {
+    Class = Class || Object;
     if (!Object.prototype.hasOwnProperty('constructors')) {
       Object.defineProperty(Object.prototype, 'constructors',
-        {get: constructors, configurable: true});
-    }
-  };
-
-  constructors.extendFunction = function extendFunction() {
-    if (!Function.prototype.hasOwnProperty('constructors')) {
-      Object.defineProperty(Function.prototype, 'constructors',
         {get: constructors, configurable: true});
     }
   };
