@@ -9,11 +9,15 @@
   // module.paths.unshift(require('path').resolve(__dirname, '..'));
   var constructors = require('../get-constructors');
   constructors.extendObject();
+  constructors.extendFunction();
+
+  var getProto = Object.getPrototypeOf ? Object.getPrototypeOf :
+    function getProto(obj) { return obj.__proto__ };
 
   var setProto = Object.setPrototypeOf ? Object.setPrototypeOf :
     function setProto(obj, proto) { obj.__proto__ = proto; };
 
-  var Empty = Object.getPrototypeOf(Function);
+  var Empty = getProto(Function);
 
   // class Klass
   function Klass1() {}
@@ -49,28 +53,139 @@
 
   describe('standard objects: getter constructors of instances', function () {
 
+    it('constructors(null) -> []', function () {
+      var expected = [];
+      assert.deepEqual(constructors(null), expected);
+      assert.deepEqual(constructors.call(null), expected);
+      assert.deepEqual(constructors(undefined), expected);
+      assert.deepEqual(constructors.call(undefined), expected);
+    });
+
     it('{}.constructors -> [Object]', function () {
-      assert.deepEqual({}.constructors, [Object]);
+      var expected = [Object];
+      assert.deepEqual({}.constructors, expected);
+      assert.deepEqual(constructors({}), expected);
+      assert.deepEqual(constructors.call({}), expected);
+
+      assert.deepEqual(new Object().constructors, expected);
+      assert.deepEqual(constructors(new Object()), expected);
+      assert.deepEqual(constructors.call(new Object()), expected);
+
+      assert.deepEqual(Object().constructors, expected);
+      assert.deepEqual(constructors(Object()), expected);
+      assert.deepEqual(constructors.call(Object()), expected);
     });
 
     it('[].constructors -> [Array, Object]', function () {
-      assert.deepEqual([].constructors, [Array, Object]);
+      var expected = [Array, Object];
+      assert.deepEqual([].constructors, expected);
+      assert.deepEqual(constructors([]), expected);
+      assert.deepEqual(constructors.call([]), expected);
+
+      assert.deepEqual(new Array().constructors, expected);
+      assert.deepEqual(constructors(new Array()), expected);
+      assert.deepEqual(constructors.call(new Array()), expected);
+
+      assert.deepEqual(Array().constructors, expected);
+      assert.deepEqual(constructors(Array()), expected);
+      assert.deepEqual(constructors.call(Array()), expected);
+    });
+
+    it('123..constructors -> [Number, Object]', function () {
+      var expected = [Number, Object];
+      assert.deepEqual(123..constructors, expected);
+      assert.deepEqual(constructors(123), expected);
+      assert.deepEqual(constructors.call(123), expected);
+
+      assert.deepEqual(new Number(123).constructors, expected);
+      assert.deepEqual(constructors(new Number(123)), expected);
+      assert.deepEqual(constructors.call(new Number(123)), expected);
+
+      assert.deepEqual(Number(123).constructors, expected);
+      assert.deepEqual(constructors(Number(123)), expected);
+      assert.deepEqual(constructors.call(Number(123)), expected);
+
+      assert.deepEqual(Object(123).constructors, expected);
+      assert.deepEqual(constructors(Object(123)), expected);
+      assert.deepEqual(constructors.call(Object(123)), expected);
+    });
+
+    it('"str".constructors -> [String, Object]', function () {
+      var expected = [String, Object];
+      assert.deepEqual("str".constructors, expected);
+      assert.deepEqual(constructors("str"), expected);
+      assert.deepEqual(constructors.call("str"), expected);
+
+      assert.deepEqual(new String("str").constructors, expected);
+      assert.deepEqual(constructors(new String("str")), expected);
+      assert.deepEqual(constructors.call(new String("str")), expected);
+
+      assert.deepEqual(String("str").constructors, expected);
+      assert.deepEqual(constructors(String("str")), expected);
+      assert.deepEqual(constructors.call(String("str")), expected);
+
+      assert.deepEqual(Object("str").constructors, expected);
+      assert.deepEqual(constructors(Object("str")), expected);
+      assert.deepEqual(constructors.call(Object("str")), expected);
+    });
+
+    it('true.constructors -> [Boolean, Object]', function () {
+      var expected = [Boolean, Object];
+      assert.deepEqual(true.constructors, expected);
+      assert.deepEqual(constructors(true), expected);
+      assert.deepEqual(constructors.call(true), expected);
+
+      assert.deepEqual(new Boolean(true).constructors, expected);
+      assert.deepEqual(constructors(new Boolean(true)), expected);
+      assert.deepEqual(constructors.call(new Boolean(true)), expected);
+
+      assert.deepEqual(Boolean(true).constructors, expected);
+      assert.deepEqual(constructors(Boolean(true)), expected);
+      assert.deepEqual(constructors.call(Boolean(true)), expected);
+
+      assert.deepEqual(Object(true).constructors, expected);
+      assert.deepEqual(constructors(Object(true)), expected);
+      assert.deepEqual(constructors.call(Object(true)), expected);
     });
 
     it('/rex/.constructors -> [RegExp, Object]', function () {
-      assert.deepEqual(/rex/.constructors, [RegExp, Object]);
+      var expected = [RegExp, Object];
+      assert.deepEqual(/rex/.constructors, expected);
+      assert.deepEqual(constructors(/rex/), expected);
+      assert.deepEqual(constructors.call(/rex/), expected);
+
+      assert.deepEqual(new RegExp('rex').constructors, expected);
+      assert.deepEqual(constructors(new RegExp('rex')), expected);
+      assert.deepEqual(constructors.call(new RegExp('rex')), expected);
+
+      assert.deepEqual(RegExp('rex').constructors, expected);
+      assert.deepEqual(constructors(RegExp('rex')), expected);
+      assert.deepEqual(constructors.call(RegExp('rex')), expected);
     });
 
     it('Error().constructors -> [Error, Object]', function () {
-      assert.deepEqual(Error().constructors, [Error, Object]);
+      var expected = [Error, Object];
+      assert.deepEqual(new Error().constructors, expected);
+      assert.deepEqual(constructors(new Error()), expected);
+      assert.deepEqual(constructors.call(new Error()), expected);
+
+      assert.deepEqual(Error().constructors, expected);
+      assert.deepEqual(constructors(Error()), expected);
+      assert.deepEqual(constructors.call(Error()), expected);
     });
 
     it('JSON.constructors -> [Object]', function () {
-      assert.deepEqual(JSON.constructors, [Object]);
+      var expected = [Object];
+      assert.deepEqual(JSON.constructors, expected);
+      assert.deepEqual(constructors(JSON), expected);
+      assert.deepEqual(constructors.call(JSON), expected);
     });
 
     it('Math.constructors -> [Object]', function () {
-      assert.deepEqual(Math.constructors, [Object]);
+      var expected = [Object];
+      assert.deepEqual(Math.constructors, expected);
+      assert.deepEqual(constructors(Math), expected);
+      assert.deepEqual(constructors.call(Math), expected);
     });
 
   }); // describe
@@ -78,77 +193,59 @@
   describe('standard objects: getter constructors of classes', function () {
 
     it('Function.constructors -> [Function, Empty]', function () {
-      assert.deepEqual(Function.constructors, [Function, Empty]);
+      var expected = [Function, Empty];
+      assert.deepEqual(Function.constructors, expected);
+      assert.deepEqual(constructors(Function), expected);
+      assert.deepEqual(constructors.call(Function), expected);
     });
 
     it('Object.constructors -> [Object, Empty]', function () {
-      assert.deepEqual(Object.constructors, [Object, Empty]);
+      var expected = [Object, Empty];
+      assert.deepEqual(Object.constructors, expected);
+      assert.deepEqual(constructors(Object), expected);
+      assert.deepEqual(constructors.call(Object), expected);
     });
 
     it('Array.constructors -> [Array, Empty]', function () {
-      assert.deepEqual(Array.constructors, [Array, Empty]);
+      var expected = [Array, Empty];
+      assert.deepEqual(Array.constructors, expected);
+      assert.deepEqual(constructors(Array), expected);
+      assert.deepEqual(constructors.call(Array), expected);
+    });
+
+    it('Number.constructors -> [Number, Empty]', function () {
+      var expected = [Number, Empty];
+      assert.deepEqual(Number.constructors, expected);
+      assert.deepEqual(constructors(Number), expected);
+      assert.deepEqual(constructors.call(Number), expected);
+    });
+
+    it('String.constructors -> [String, Empty]', function () {
+      var expected = [String, Empty];
+      assert.deepEqual(String.constructors, expected);
+      assert.deepEqual(constructors(String), expected);
+      assert.deepEqual(constructors.call(String), expected);
+    });
+
+    it('Boolean.constructors -> [Boolean, Empty]', function () {
+      var expected = [Boolean, Empty];
+      assert.deepEqual(Boolean.constructors, expected);
+      assert.deepEqual(constructors(Boolean), expected);
+      assert.deepEqual(constructors.call(Boolean), expected);
     });
 
     it('RegExp.constructors -> [RegExp, Empty]', function () {
-      assert.deepEqual(RegExp.constructors, [RegExp, Empty]);
+      var expected = [RegExp, Empty];
+      assert.deepEqual(RegExp.constructors, expected);
+      assert.deepEqual(constructors(RegExp), expected);
+      assert.deepEqual(constructors.call(RegExp), expected);
     });
 
     it('Error.constructors -> [Error, Empty]', function () {
-      assert.deepEqual(Error.constructors, [Error, Empty]);
-    });
-
-  }); // describe
-
-
-  describe('standard objects: constructors call instances', function () {
-
-    it('constructors.call({}) -> [Object]', function () {
-      assert.deepEqual(constructors.call({}), [Object]);
-    });
-
-    it('constructors.call([]) -> [Array, Object]', function () {
-      assert.deepEqual(constructors.call([]), [Array, Object]);
-    });
-
-    it('constructors.call(/rex/) -> [RegExp, Object]', function () {
-      assert.deepEqual(constructors.call(/rex/), [RegExp, Object]);
-    });
-
-    it('constructors.call(Error()) -> [Error, Object]', function () {
-      assert.deepEqual(constructors.call(Error()), [Error, Object]);
-    });
-
-    it('constructors.call(JSON) -> [Object]', function () {
-      assert.deepEqual(constructors.call(JSON), [Object]);
-    });
-
-    it('constructors.call(Math) -> [Object]', function () {
-      assert.deepEqual(constructors.call(Math), [Object]);
-    });
-
-  }); // describe
-
-
-  describe('standard objects: constructors call classes', function () {
-
-    it('constructors.call(Function) -> [Function, Empty]', function () {
-      assert.deepEqual(constructors.call(Function), [Function, Empty]);
-    });
-
-    it('constructors.call(Object) -> [Object, Empty]', function () {
-      assert.deepEqual(constructors.call(Object), [Object, Empty]);
-    });
-
-    it('constructors.call(Array) -> [Array, Empty]', function () {
-      assert.deepEqual(constructors.call(Array), [Array, Empty]);
-    });
-
-    it('constructors.call(RegExp) -> [RegExp, Empty]', function () {
-      assert.deepEqual(constructors.call(RegExp), [RegExp, Empty]);
-    });
-
-    it('constructors.call(Error) -> [Error, Empty]', function () {
-      assert.deepEqual(constructors.call(Error), [Error, Empty]);
+      var expected = [Error, Empty];
+      assert.deepEqual(Error.constructors, expected);
+      assert.deepEqual(constructors(Error), expected);
+      assert.deepEqual(constructors.call(Error), expected);
     });
 
   }); // describe
@@ -159,11 +256,17 @@
     describe(prefixMessage + 'getter constructors of instances', function () {
 
       it('new Klass().constructors -> [Klass, Object]', function () {
-        assert.deepEqual(new Klass().constructors, [Klass, Object]);
+        var expected = [Klass, Object];
+        assert.deepEqual(new Klass().constructors, expected);
+        assert.deepEqual(constructors(new Klass()), expected);
+        assert.deepEqual(constructors.call(new Klass()), expected);
       });
 
       it('new SubKlass().constructors -> [SubKlass, Klass, Object]', function () {
-        assert.deepEqual(new SubKlass().constructors, [SubKlass, Klass, Object]);
+        var expected = [SubKlass, Klass, Object];
+        assert.deepEqual(new SubKlass().constructors, expected);
+        assert.deepEqual(constructors(new SubKlass()), expected);
+        assert.deepEqual(constructors.call(new SubKlass()), expected);
       });
 
       StrangeFunction &&
@@ -174,7 +277,10 @@
       StrangeFunction &&
       it('(f = new StrangeFunction()).constructors -> [f, StrangeFunction, Function, Empty]', function () {
         var f = new StrangeFunction();
-        assert.deepEqual(f.constructors, [f, StrangeFunction, Function, Empty]);
+        var expected = [f, StrangeFunction, Function, Empty];
+        assert.deepEqual(f.constructors, expected);
+        assert.deepEqual(constructors(f), expected);
+        assert.deepEqual(constructors.call(f), expected);
       });
 
     }); // describe
@@ -183,53 +289,25 @@
     describe(prefixMessage + 'getter constructors of classes', function () {
 
       it('Klass.constructors -> [Klass, Empty]', function () {
-        assert.deepEqual(Klass.constructors, [Klass, Empty]);
+        var expected = [Klass, Empty];
+        assert.deepEqual(Klass.constructors, expected);
+        assert.deepEqual(constructors(Klass), expected);
+        assert.deepEqual(constructors.call(Klass), expected);
       });
 
       it('SubKlass.constructors -> [SubKlass, Klass, Empty]', function () {
-        assert.deepEqual(SubKlass.constructors, [SubKlass, Klass, Empty]);
+        var expected = [SubKlass, Klass, Empty];
+        assert.deepEqual(SubKlass.constructors, expected);
+        assert.deepEqual(constructors(SubKlass), expected);
+        assert.deepEqual(constructors.call(SubKlass), expected);
       });
 
       StrangeFunction &&
       it('StrangeFunction.constructors -> [StrangeFunction, Function, Empty]', function () {
-        assert.deepEqual(StrangeFunction.constructors, [StrangeFunction, Function, Empty]);
-      });
-
-    }); // describe
-
-
-    describe(prefixMessage + 'constructors call instances', function () {
-
-      it('constructors.call(new Klass()) -> [Klass, Object]', function () {
-        assert.deepEqual(constructors.call(new Klass()), [Klass, Object]);
-      });
-
-      it('constructors.call(new SubKlass()) -> [SubKlass, Klass, Object]', function () {
-        assert.deepEqual(constructors.call(new SubKlass()), [SubKlass, Klass, Object]);
-      });
-
-      StrangeFunction &&
-      it('constructors.call(f = new StrangeFunction()) -> [f, StrangeFunction, Function, Empty]', function () {
-        var f = new StrangeFunction();
-        assert.deepEqual(constructors.call(f), [f, StrangeFunction, Function, Empty]);
-      });
-
-    }); // describe
-
-
-    describe(prefixMessage + 'constructors call classes', function () {
-
-      it('constructors.call(Klass) -> [Klass, Empty]', function () {
-        assert.deepEqual(constructors.call(Klass), [Klass, Empty]);
-      });
-
-      it('constructors.call(SubKlass) -> [SubKlass, Klass, Empty]', function () {
-        assert.deepEqual(constructors.call(SubKlass), [SubKlass, Klass, Empty]);
-      });
-
-      StrangeFunction &&
-      it('constructors.call(StrangeFunction) -> [StrangeFunction, Function, Empty]', function () {
-        assert.deepEqual(constructors.call(StrangeFunction), [StrangeFunction, Function, Empty]);
+        var expected = [StrangeFunction, Function, Empty];
+        assert.deepEqual(StrangeFunction.constructors, expected);
+        assert.deepEqual(constructors(StrangeFunction), expected);
+        assert.deepEqual(constructors.call(StrangeFunction), expected);
       });
 
     }); // describe
@@ -249,7 +327,7 @@
     doTest('(ES6 class) ', Klass, SubKlass, null);
 
   } catch (e) {
-    describe('harmony classes not supported: ' + e, function () {
+    describe('use iojs (ES6) and try mocha --harmony!', function () {
       it('harmony classes not supported: ' + e, function () {});
     });
   }

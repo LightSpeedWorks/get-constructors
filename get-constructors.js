@@ -5,16 +5,22 @@
 
   module.exports = exports = constructors;
 
-  function constructors() {
+  var getProto = Object.getPrototypeOf ? Object.getPrototypeOf :
+    function getProto(obj) { return obj.__proto__ };
+
+  function constructors(obj) {
+    if (arguments.length === 0) obj = this;
+    if (obj != null && typeof obj !== 'object' && typeof obj !== 'function')
+      obj = Object(obj);
     var classes = [];
 
-    if (this instanceof Function) {
-      for (var obj = this; obj; obj = Object.getPrototypeOf(obj))
+    if (obj instanceof Function) {
+      for (; obj; obj = getProto(obj))
         if (typeof obj === 'function')
           classes.push(obj);
     }
     else {
-      for (var obj = this; obj; obj = Object.getPrototypeOf(obj))
+      for (; obj; obj = getProto(obj))
         if (obj.hasOwnProperty('constructor'))
           classes.push(obj.constructor);
     }
