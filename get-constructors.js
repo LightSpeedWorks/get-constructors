@@ -28,7 +28,7 @@
     return classes;
   }
 
-  constructors.extendObject = function extendObject(Class) {
+  constructors.extendPrototype = function extendPrototype(Class) {
     Class = Class || Object;
     if (!Object.prototype.hasOwnProperty('constructors')) {
       Object.defineProperty(Object.prototype, 'constructors',
