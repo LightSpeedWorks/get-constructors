@@ -16,7 +16,7 @@
   var setProto = Object.setPrototypeOf ? Object.setPrototypeOf :
     function setProto(obj, proto) { obj.__proto__ = proto; };
 
-  var Empty = getProto(Function);
+  var FuncProto = Function.prototype;
 
   // class Klass
   function Klass1() {}
@@ -26,6 +26,15 @@
   setProto(SubKlass1, Klass1);
   function SubKlass1() {
     Klass1.apply(this, arguments);
+  }
+
+  // class CustomArray extends Error
+  util.inherits(CustomArray1, Array);
+  setProto(CustomArray1, Array);
+  function CustomArray1() {
+    var a = Array.apply(null, arguments);
+    setProto(a, CustomArray1.prototype);
+    return a;
   }
 
   // class CustomError extends Error
@@ -40,7 +49,7 @@
   // class StrangeFunction extends Function
   //util.inherits(StrangeFunction1, Function);
   setProto(StrangeFunction1, Function);
-  StrangeFunction1.prototype = function instanceOfStrangeFunction1() {};
+  StrangeFunction1.prototype = function prototypeOfStrangeFunction1() {};
   Object.defineProperty(StrangeFunction1.prototype, 'constructor',
     {value: StrangeFunction1, configurable: true, writable: true});
   setProto(StrangeFunction1.prototype, Function);
@@ -191,57 +200,57 @@
 
   describe('standard objects: getter constructors of classes', function () {
 
-    it('Function.constructors -> [Function, Empty]', function () {
-      var expected = [Function, Empty];
+    it('Function.constructors -> [Function, FuncProto]', function () {
+      var expected = [Function, FuncProto];
       assert.deepEqual(Function.constructors, expected);
       assert.deepEqual(constructors(Function), expected);
       assert.deepEqual(constructors.call(Function), expected);
     });
 
-    it('Object.constructors -> [Object, Empty]', function () {
-      var expected = [Object, Empty];
+    it('Object.constructors -> [Object, FuncProto]', function () {
+      var expected = [Object, FuncProto];
       assert.deepEqual(Object.constructors, expected);
       assert.deepEqual(constructors(Object), expected);
       assert.deepEqual(constructors.call(Object), expected);
     });
 
-    it('Array.constructors -> [Array, Empty]', function () {
-      var expected = [Array, Empty];
+    it('Array.constructors -> [Array, FuncProto]', function () {
+      var expected = [Array, FuncProto];
       assert.deepEqual(Array.constructors, expected);
       assert.deepEqual(constructors(Array), expected);
       assert.deepEqual(constructors.call(Array), expected);
     });
 
-    it('Number.constructors -> [Number, Empty]', function () {
-      var expected = [Number, Empty];
+    it('Number.constructors -> [Number, FuncProto]', function () {
+      var expected = [Number, FuncProto];
       assert.deepEqual(Number.constructors, expected);
       assert.deepEqual(constructors(Number), expected);
       assert.deepEqual(constructors.call(Number), expected);
     });
 
-    it('String.constructors -> [String, Empty]', function () {
-      var expected = [String, Empty];
+    it('String.constructors -> [String, FuncProto]', function () {
+      var expected = [String, FuncProto];
       assert.deepEqual(String.constructors, expected);
       assert.deepEqual(constructors(String), expected);
       assert.deepEqual(constructors.call(String), expected);
     });
 
-    it('Boolean.constructors -> [Boolean, Empty]', function () {
-      var expected = [Boolean, Empty];
+    it('Boolean.constructors -> [Boolean, FuncProto]', function () {
+      var expected = [Boolean, FuncProto];
       assert.deepEqual(Boolean.constructors, expected);
       assert.deepEqual(constructors(Boolean), expected);
       assert.deepEqual(constructors.call(Boolean), expected);
     });
 
-    it('RegExp.constructors -> [RegExp, Empty]', function () {
-      var expected = [RegExp, Empty];
+    it('RegExp.constructors -> [RegExp, FuncProto]', function () {
+      var expected = [RegExp, FuncProto];
       assert.deepEqual(RegExp.constructors, expected);
       assert.deepEqual(constructors(RegExp), expected);
       assert.deepEqual(constructors.call(RegExp), expected);
     });
 
-    it('Error.constructors -> [Error, Empty]', function () {
-      var expected = [Error, Empty];
+    it('Error.constructors -> [Error, FuncProto]', function () {
+      var expected = [Error, FuncProto];
       assert.deepEqual(Error.constructors, expected);
       assert.deepEqual(constructors(Error), expected);
       assert.deepEqual(constructors.call(Error), expected);
@@ -250,10 +259,11 @@
   }); // describe
 
 
-  function doTest(prefixMessage, Klass, SubKlass, StrangeFunction) {
+  function doTest(prefixMessage, Klass, SubKlass, CustomArray, CustomError, StrangeFunction) {
 
     describe(prefixMessage + 'getter constructors of instances', function () {
 
+      Klass &&
       it('new Klass().constructors -> [Klass, Object]', function () {
         var expected = [Klass, Object];
         assert.deepEqual(new Klass().constructors, expected);
@@ -261,11 +271,38 @@
         assert.deepEqual(constructors.call(new Klass()), expected);
       });
 
+      SubKlass && Klass &&
       it('new SubKlass().constructors -> [SubKlass, Klass, Object]', function () {
         var expected = [SubKlass, Klass, Object];
         assert.deepEqual(new SubKlass().constructors, expected);
         assert.deepEqual(constructors(new SubKlass()), expected);
         assert.deepEqual(constructors.call(new SubKlass()), expected);
+      });
+
+      CustomArray &&
+      it('new CustomArray(1, 2, 3) -> [1, 2, 3]', function () {
+        assert.deepEqual(new CustomArray(1, 2, 3), [1, 2, 3]);
+      });
+
+      CustomError &&
+      it('new CustomError("msg") -> new Error("msg")', function () {
+        assert.deepEqual(new CustomError("msg"), new Error("msg"));
+      });
+
+      CustomArray &&
+      it('new CustomArray().constructors -> [CustomArray, Array, Object]', function () {
+        var expected = [CustomArray, Array, Object];
+        assert.deepEqual(new CustomArray().constructors, expected);
+        assert.deepEqual(constructors(new CustomArray()), expected);
+        assert.deepEqual(constructors.call(new CustomArray()), expected);
+      });
+
+      CustomError &&
+      it('new CustomError().constructors -> [CustomError, Error, Object]', function () {
+        var expected = [CustomError, Error, Object];
+        assert.deepEqual(new CustomError().constructors, expected);
+        assert.deepEqual(constructors(new CustomError()), expected);
+        assert.deepEqual(constructors.call(new CustomError()), expected);
       });
 
       StrangeFunction &&
@@ -274,9 +311,9 @@
       });
 
       StrangeFunction &&
-      it('(f = new StrangeFunction()).constructors -> [f, StrangeFunction, Function, Empty]', function () {
+      it('(f = new StrangeFunction()).constructors -> [f, StrangeFunction, Function, FuncProto]', function () {
         var f = new StrangeFunction();
-        var expected = [f, StrangeFunction, Function, Empty];
+        var expected = [f, StrangeFunction, Function, FuncProto];
         assert.deepEqual(f.constructors, expected);
         assert.deepEqual(constructors(f), expected);
         assert.deepEqual(constructors.call(f), expected);
@@ -287,23 +324,41 @@
 
     describe(prefixMessage + 'getter constructors of classes', function () {
 
-      it('Klass.constructors -> [Klass, Empty]', function () {
-        var expected = [Klass, Empty];
+      Klass &&
+      it('Klass.constructors -> [Klass, FuncProto]', function () {
+        var expected = [Klass, FuncProto];
         assert.deepEqual(Klass.constructors, expected);
         assert.deepEqual(constructors(Klass), expected);
         assert.deepEqual(constructors.call(Klass), expected);
       });
 
-      it('SubKlass.constructors -> [SubKlass, Klass, Empty]', function () {
-        var expected = [SubKlass, Klass, Empty];
+      SubKlass && Klass &
+      it('SubKlass.constructors -> [SubKlass, Klass, FuncProto]', function () {
+        var expected = [SubKlass, Klass, FuncProto];
         assert.deepEqual(SubKlass.constructors, expected);
         assert.deepEqual(constructors(SubKlass), expected);
         assert.deepEqual(constructors.call(SubKlass), expected);
       });
 
+      CustomArray &&
+      it('CustomArray.constructors -> [CustomArray, Array, FuncProto]', function () {
+        var expected = [CustomArray, Array, FuncProto];
+        assert.deepEqual(CustomArray.constructors, expected);
+        assert.deepEqual(constructors(CustomArray), expected);
+        assert.deepEqual(constructors.call(CustomArray), expected);
+      });
+
+      CustomError &&
+      it('CustomError.constructors -> [CustomError, Error, FuncProto]', function () {
+        var expected = [CustomError, Error, FuncProto];
+        assert.deepEqual(CustomError.constructors, expected);
+        assert.deepEqual(constructors(CustomError), expected);
+        assert.deepEqual(constructors.call(CustomError), expected);
+      });
+
       StrangeFunction &&
-      it('StrangeFunction.constructors -> [StrangeFunction, Function, Empty]', function () {
-        var expected = [StrangeFunction, Function, Empty];
+      it('StrangeFunction.constructors -> [StrangeFunction, Function, FuncProto]', function () {
+        var expected = [StrangeFunction, Function, FuncProto];
         assert.deepEqual(StrangeFunction.constructors, expected);
         assert.deepEqual(constructors(StrangeFunction), expected);
         assert.deepEqual(constructors.call(StrangeFunction), expected);
@@ -313,17 +368,30 @@
 
   } // doTest
 
-  doTest('(ES5) ', Klass1, SubKlass1, StrangeFunction1);
+  doTest('(ES5) ', Klass1, SubKlass1, CustomArray1, CustomError1, StrangeFunction1);
 
   try {
-    var Klass, SubKlass;
+    var Klass, SubKlass, CustomArray, CustomError;
 
     eval('class Klass2 {} \n' +
          'class SubKlass2 extends Klass2 {} \n' +
+         'class CustomArray22 extends Array {\n' +
+         '  constructor() { for (var i = 0; i < arguments.length; ++i) this.push(arguments[i]); }\n' +
+         '} \n' +
+         'class CustomArray2 extends Array {\n' +
+         '  constructor() { ; \n' +
+         '    var a = Array.apply(null, arguments);\n' +
+         '    setProto(a, CustomArray2.prototype);\n' +
+         '    return a;' +
+         '  }\n' +
+         '} \n' +
+         'class CustomError2 extends Error {} \n' +
          'Klass = Klass2; \n' +
-         'SubKlass = SubKlass2; \n');
+         'SubKlass = SubKlass2; \n' +
+         'CustomArray = CustomArray2; \n' +
+         'CustomError = CustomError2; \n');
 
-    doTest('(ES6 class) ', Klass, SubKlass, null);
+    doTest('(ES6 class) ', Klass, SubKlass, CustomArray, CustomError);
 
   } catch (e) {
     describe('use iojs (ES6) and try mocha --harmony!', function () {
