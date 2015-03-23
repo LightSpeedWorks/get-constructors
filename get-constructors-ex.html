@@ -1,0 +1,13 @@
+<script src="get-constructors.js"></script>
+<script>
+window.onload = function () {
+  function pr() {
+    var msg = [].slice.call(arguments).join(' ');
+    document.writeln('<p>' + msg + '</p>');
+    console.log(msg);
+  }
+  function getName(x) { return x.name; }
+  pr('window:', constructors(window).map(getName));
+  pr('document:', constructors(document).map(getName));
+}
+</script>
