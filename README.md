@@ -11,8 +11,10 @@ $ npm install get-constructor
 
 or
 
+http://lightspeedworks.github.io/get-constructors/get-constructors.js
+
 ```html
-<script src="get-constructors.js"></script>
+<script src="http://lightspeedworks.github.io/get-constructors/get-constructors.js"></script>
 ```
 
 # USAGE:
