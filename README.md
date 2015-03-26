@@ -47,7 +47,7 @@ constructors(new SubKlass); // -> [SubKlass, Klass, Object]
 constructors(SubKlass); // -> [SubKlass, Klass, FuncProto]
 ```
 
-## constructors.extendPrototype([Class = Object])
+## constructors.extendPrototype([ctor = Object])
 
 ```js
 var constructors = require('get-constructors');
@@ -81,6 +81,7 @@ SubKlass.constructors // -> [SubKlass, Klass, FuncProto]
 ## property: this.constructors
 
   Get an array of constructor functions. (Classes)
+  (after: constructors.extendPrototype())
 
 ### Format
 
@@ -100,6 +101,7 @@ console.log(classes[2] === Object);    // -> true
 ## property: Class.constructors
 
   Get an array of constructor functions.
+  (after: constructors.extendPrototype())
 
 ### Format
 

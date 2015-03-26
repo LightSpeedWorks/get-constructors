@@ -3,6 +3,7 @@
 ## プロパティ: this.constructors
 
   コンストラクタ関数(クラス)の配列を取得する。
+  (after: constructors.extendPrototype())
 
 ### 形式
 
@@ -22,6 +23,7 @@ console.log(classes[2] === Object);    // -> true
 ## プロパティ: Class.constructors
 
   コンストラクタ関数(クラス)の配列を取得する。
+  (after: constructors.extendPrototype())
 
 ### 形式
 
