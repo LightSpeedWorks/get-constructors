@@ -78,6 +78,44 @@ setProto(SubKlass, Klass);
 SubKlass.constructors // -> [SubKlass, Klass, FuncProto]
 ```
 
+## property: this.constructors
+
+  Get an array of constructor functions. (Classes)
+
+### Format
+
+```js
+var MyClass = BaseClass.extend('MyClass');
+var o1 = new MyClass();
+var classes = o1.constructors;
+console.log(classes[0] === MyClass);   // -> true
+console.log(classes[1] === BaseClass); // -> true
+console.log(classes[2] === Object);    // -> true
+```
+
+## Returns
+
+  An array of constructor functions. (Classes)
+
+## property: Class.constructors
+
+  Get an array of constructor functions.
+
+### Format
+
+```js
+var MyClass = BaseClass.extend('MyClass');
+var classes = MyClass.constructors;
+console.log(classes[0] === MyClass);   // -> true
+console.log(classes[1] === BaseClass); // -> true
+console.log(classes[2] === Object);    // -> true
+```
+
+## Returns
+
+  An array of constructor functions.
+
+
 # LICENSE:
 
   MIT License
