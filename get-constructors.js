@@ -3,10 +3,12 @@
 (function () {
   'use strict';
 
+  var g = Function('return this')(); // get window or global object
+
   if (typeof module === 'object' && typeof module.exports === 'object')
     module.exports = exports = constructors;
   else
-    Function('return this')()['constructors'] = constructors;
+    g.constructors = constructors;
 
   var getProto = Object.getPrototypeOf ? Object.getPrototypeOf :
     function getProto(obj) { return obj.__proto__ };
@@ -39,10 +41,10 @@
   }
 
   // extendPrototype
-  constructors.extendPrototype = function extendPrototype(Class) {
-    Class = Class || Object;
-    if (!Object.prototype.hasOwnProperty('constructors')) {
-      Object.defineProperty(Object.prototype, 'constructors',
+  constructors.extendPrototype = function extendPrototype(ctor) {
+    ctor = ctor || Object;
+    if (!ctor.prototype.hasOwnProperty('constructors')) {
+      Object.defineProperty(ctor.prototype, 'constructors',
         {get: constructors, configurable: true});
     }
   };
