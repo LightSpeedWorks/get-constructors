@@ -7,8 +7,7 @@
   var util = require('util');
 
   // module.paths.unshift(require('path').resolve(__dirname, '..'));
-  var constructors = require('../get-constructors');
-  constructors.extendPrototype();
+  var constructors = require('../get-constructors').extendPrototype();
 
   var getProto = Object.getPrototypeOf ? Object.getPrototypeOf :
     function getProto(obj) { return obj.__proto__ };

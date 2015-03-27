@@ -52,10 +52,9 @@ constructors(SubKlass); // -> [SubKlass, Klass, FuncProto]
 ## constructors.extendPrototype([ctor = Object])
 
 ```js
-var constructors = require('get-constructors');
+var constructors = require('get-constructors').extendPrototype();
 
 var FuncProto = Function.prototype;
-constructors.extendPrototype();
 
 ({}).constructors // -> [Object]
 Object.constructors // -> [Object, FuncProto]
