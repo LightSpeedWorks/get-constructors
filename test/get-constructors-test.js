@@ -3,6 +3,9 @@
 (function () {
   'use strict';
 
+  var CYAN = '\x1b[36m';
+  var RED  = '\x1b[31m';
+
   var assert = require('assert');
   var util = require('util');
 
@@ -393,8 +396,8 @@
     doTest('(ES6 class) ', Klass, SubKlass, CustomArray, CustomError);
 
   } catch (e) {
-    describe('use iojs (ES6) and try mocha --harmony!', function () {
-      it('harmony classes not supported: ' + e, function () {});
+    describe('use iojs (ES6) and try ' + CYAN + 'mocha --harmony!', function () {
+      it('harmony classes not supported: ' + RED + e, function () {});
     });
   }
 
