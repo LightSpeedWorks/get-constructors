@@ -5,7 +5,7 @@ this.constructors = function () {
 
   // getProto
   var getProto = Object.getPrototypeOf ? Object.getPrototypeOf :
-    function getProto(obj) { return obj.__proto__ };
+    function getProto(obj) { return obj.__proto__; };
 
   // constructors
   function constructors(obj) {
@@ -21,13 +21,13 @@ this.constructors = function () {
     if (obj instanceof Function)
       // for Class/constructor
       for (; obj; obj = getProto(obj))
-        if (typeof obj === 'function')
+        typeof obj === 'function' &&
           classes.push(obj);
 
     else
       // for instance/object
       for (; obj; obj = getProto(obj))
-        if (obj.hasOwnProperty('constructor'))
+        obj.hasOwnProperty('constructor') &&
           classes.push(obj.constructor);
 
     return classes;
