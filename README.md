@@ -1,12 +1,14 @@
 [get-constructors](https://www.npmjs.org/package/get-constructors) - npm
 ====
 
-get an array of constructors for objects and classes.
+  get an array of constructors (classes) for objects and classes.
+
+[Japanese version/■日本語版はこちら■](README-JP.md#readme)
 
 # INSTALL:
 
 ```bash
-$ npm install get-constructor
+$ npm install get-constructors --save
 ```
 
 or
@@ -15,6 +17,14 @@ http://lightspeedworks.github.io/get-constructors/get-constructors.js
 
 ```html
 <script src="http://lightspeedworks.github.io/get-constructors/get-constructors.js"></script>
+```
+
+# PREPARATION:
+
+```js
+(function (constructors) {
+  // you can use constructors
+})(this.constructors || require('get-constructors'));
 ```
 
 # USAGE:
@@ -81,7 +91,7 @@ SubKlass.constructors // -> [SubKlass, Klass, FuncProto]
 
 ## property: this.constructors
 
-  Get an array of constructor functions. (Classes)
+  Get an array of constructor functions (classes).
   (after: constructors.extendPrototype())
 
 ### Format
@@ -97,11 +107,11 @@ console.log(classes[2] === Object);    // -> true
 
 ## Returns
 
-  An array of constructor functions. (Classes)
+  An array of constructor functions (classes).
 
 ## property: Class.constructors
 
-  Get an array of constructor functions.
+  Get an array of constructor functions (classes).
   (after: constructors.extendPrototype())
 
 ### Format
@@ -116,7 +126,7 @@ console.log(classes[2] === Object);    // -> true
 
 ## Returns
 
-  An array of constructor functions.
+  An array of constructor functions (classes).
 
 
 # LICENSE:

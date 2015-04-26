@@ -1,3 +1,32 @@
+[get-constructors](https://www.npmjs.org/package/get-constructors) - npm
+====
+
+[English version](README.md#readme)
+
+  オブジェクトやクラスのコンストラクタ配列(クラス一覧)を取得する。
+
+# インストール:
+
+```bash
+$ npm install get-constructors --save
+```
+
+または
+
+http://lightspeedworks.github.io/get-constructors/get-constructors.js
+
+```html
+<script src="http://lightspeedworks.github.io/get-constructors/get-constructors.js"></script>
+```
+
+# 準備:
+
+```js
+(function (constructors) {
+  // constructors を使う事ができます
+})(this.constructors || require('get-constructors'));
+```
+
 # 使い方:
 
 ## プロパティ: this.constructors
@@ -41,4 +70,4 @@ console.log(classes[2] === Object);    // -> true
 
 # ライセンス:
 
-  MIT
+  MITライセンス
