@@ -19,12 +19,18 @@ http://lightspeedworks.github.io/get-constructors/get-constructors.js
 <script src="http://lightspeedworks.github.io/get-constructors/get-constructors.js"></script>
 ```
 
-# PREPARATION:
+# PREPARE:
 
 ```js
 (function (constructors) {
   // you can use constructors
 })(this.constructors || require('get-constructors'));
+```
+
+or
+
+```js
+var constructors = this.constructors || require('get-constructors'));
 ```
 
 # USAGE:

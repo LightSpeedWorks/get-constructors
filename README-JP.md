@@ -27,6 +27,12 @@ http://lightspeedworks.github.io/get-constructors/get-constructors.js
 })(this.constructors || require('get-constructors'));
 ```
 
+または
+
+```js
+var constructors = this.constructors || require('get-constructors'));
+```
+
 # 使い方:
 
 ## プロパティ: this.constructors
