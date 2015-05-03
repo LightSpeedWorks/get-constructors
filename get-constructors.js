@@ -46,7 +46,7 @@ this.constructors = function () {
 
   // exports
   if (typeof module === 'object' && module.exports)
-    module.exports = exports = constructors;
+    module.exports = constructors;
 
   return constructors;
 
