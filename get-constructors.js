@@ -38,9 +38,13 @@ this.constructors = function () {
     ctor = ctor || Object;
 
     if (!ctor.prototype.hasOwnProperty('constructors'))
-      Object.defineProperty &&
-      Object.defineProperty(ctor.prototype, 'constructors',
-        {get: constructors, configurable: true});
+      if (ctor.prototype.hasOwnProperty('__defineGetter__'))
+        ctor.prototype.__defineGetter__('constructors', constructors);
+      else if (Object.defineProperty)
+        try {
+          Object.defineProperty(ctor.prototype, 'constructors',
+            {get: constructors, configurable: true});
+        } catch (e) {}
 
     return this;
   };
