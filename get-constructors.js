@@ -38,6 +38,7 @@ this.constructors = function () {
     ctor = ctor || Object;
 
     if (!ctor.prototype.hasOwnProperty('constructors'))
+      Object.defineProperty &&
       Object.defineProperty(ctor.prototype, 'constructors',
         {get: constructors, configurable: true});
 
