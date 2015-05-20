@@ -8,10 +8,28 @@ this.constructors = function () {
     Object.prototype.__proto__ ?
     function getProto(obj) { return obj.__proto__; } :
     function getProto(obj) {
-      if (obj.constructor && obj.constructor.super_)
-        return obj.constructor.super_.prototype;
+      var ctor = obj.constructor;
+      if (typeof ctor === 'function') {
+        if (ctor.prototype !== obj)
+          return ctor.prototype;
+        if (typeof ctor['super'] === 'function')
+          return ctor['super'].prototype;
+        if (typeof ctor.super_ === 'function')
+          return ctor.super_.prototype;
+      }
       return obj.__proto__;
     };
+
+  try {
+    Object.name = 'Object';
+    Array.name  = 'Array';
+    Error.name  = 'Error';
+    RegExp.name = 'RegExp';
+    String.name = 'String';
+    Number.name = 'Number';
+    Boolean.name = 'Boolean';
+    Function.name = 'Function';
+  } catch (err) {}
 
   // constructors
   function constructors(obj) {
@@ -26,21 +44,28 @@ this.constructors = function () {
     if (obj === Error) return [Error, Function.prototype];
     if (obj === RegExp) return [RegExp, Function.prototype];
     if (obj === Object) return [Object, Function.prototype];
+    if (obj === String) return [String, Function.prototype];
+    if (obj === Number) return [Number, Function.prototype];
+    if (obj === Boolean) return [Boolean, Function.prototype];
     if (obj === Function) return [Function, Function.prototype];
     if (obj.constructor === Array) return [Array, Object];
     if (obj.constructor === Error) return [Error, Object];
     if (obj.constructor === RegExp) return [RegExp, Object];
     if (obj.constructor === Object) return [Object];
+    if (obj.constructor === String) return [String, Object];
+    if (obj.constructor === Number) return [Number, Object];
+    if (obj.constructor === Boolean) return [Boolean, Object];
 
     var classes = [];
 
     if (obj instanceof Function) {
       // for Class/constructor
-      for (; obj; obj = ((obj.constructor && obj.constructor.super_) || getProto(obj)))
-        typeof obj === 'function' &&
+      for (; obj; obj = (obj['super'] || obj.super_ || getProto(obj)))
+        if (typeof obj === 'function')
           classes.push(obj);
 
-      if (classes[classes.length - 1] !== Function.prototype)
+      if (classes.length === 0 ||
+          classes[classes.length - 1] !== Function.prototype)
         classes.push(Function.prototype);
     }
     else {
@@ -48,16 +73,23 @@ this.constructors = function () {
 
       // for instance/object
       for (; obj; obj = getProto(obj)) {
-        if (obj.hasOwnProperty && obj.hasOwnProperty('constructor'))
-          classes.push(obj.constructor);
-        else if (obj.constructor)
-          classes.push(obj.constructor);
+        if (obj.hasOwnProperty) {
+          if (obj.hasOwnProperty('constructor'))
+            classes.push(obj.constructor);
+        }
+        else if (obj.constructor) {
+          if (classes.length === 0 ||
+              classes[classes.length - 1] !== obj.constructor)
+            classes.push(obj.constructor);
+        }
       }
 
-      if (classes.length === 0 && typeof saveObj.constructor === 'function')
+      if (classes.length === 0 &&
+          typeof saveObj.constructor === 'function')
         classes = [saveObj.constructor];
 
-      if (classes[classes.length - 1] !== Object)
+      if (classes.length === 0 ||
+          classes[classes.length - 1] !== Object)
         classes.push(Object);
     }
 

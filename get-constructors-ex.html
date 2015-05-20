@@ -1,3 +1,13 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"> 
+<meta http-equiv="X-UA-Compatible" content="IE=Edge, Chrome=1">
+<meta http-equiv="Content-Language" content="ja">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
 <script src="get-constructors.js"></script>
 <script>
 (function (constructors) {
@@ -9,7 +19,7 @@
     if (typeof console !== 'undefined')
       console.log(msg);
     if (typeof document !== 'undefined')
-      document.write(msg + '<br/>');
+      document.writeln(msg + '<br/>');
   }
 
   // Array.prototype.map for ie8
@@ -23,25 +33,23 @@
 
   window.onload = function () {
 
-    try {
-      Object.name = 'Object';
-      Array.name  = 'Array';
-      Error.name  = 'Error';
-      RegExp.name = 'RegExp';
-      Function.name = 'Function';
-      Function.prototype.name = 'Empty';
-    } catch (err) {}
-
-    pr('Array:', '[' + constructors(Array).map(nm).join(', ') + ']');
-    pr('Object:', '[' + constructors(Object).map(nm).join(', ') + ']');
-    pr('Function:', '[' + constructors(Function).map(nm).join(', ') + ']');
     pr('Error:', '[' + constructors(Error).map(nm).join(', ') + ']');
+    pr('Array:', '[' + constructors(Array).map(nm).join(', ') + ']');
+    pr('String:', '[' + constructors(String).map(nm).join(', ') + ']');
+    pr('Object:', '[' + constructors(Object).map(nm).join(', ') + ']');
     pr('RegExp:', '[' + constructors(RegExp).map(nm).join(', ') + ']');
+    pr('Number:', '[' + constructors(Number).map(nm).join(', ') + ']');
+    pr('Boolean:', '[' + constructors(Boolean).map(nm).join(', ') + ']');
+    pr('Function:', '[' + constructors(Function).map(nm).join(', ') + ']');
 
     pr('{}:', '[' + constructors({}).map(nm).join(', ') + ']');
     pr('[]:', '[' + constructors([]).map(nm).join(', ') + ']');
     pr('/rex/:', '[' + constructors(/rex/).map(nm).join(', ') + ']');
     pr('new Error:', '[' + constructors(new Error).map(nm).join(', ') + ']');
+    pr('new String:', '[' + constructors(new String).map(nm).join(', ') + ']');
+    pr('new Number:', '[' + constructors(new Number).map(nm).join(', ') + ']');
+    pr('new Boolean:', '[' + constructors(new Boolean).map(nm).join(', ') + ']');
+    pr('new Function:', '[' + constructors(new Function).map(nm).join(', ') + ']');
     pr('window:', '[' + constructors(window).map(nm).join(', ') + ']');
     pr('document:', '[' + constructors(document).map(nm).join(', ') + ']');
 
@@ -50,16 +58,23 @@
     pr('constructors.extendPrototype();');
     pr();
 
-    pr('Array:', '[' + Array.constructors().map(nm).join(', ') + ']');
-    pr('Object:', '[' + Object.constructors().map(nm).join(', ') + ']');
-    pr('Function:', '[' + Function.constructors().map(nm).join(', ') + ']');
     pr('Error:', '[' + Error.constructors().map(nm).join(', ') + ']');
+    pr('Array:', '[' + Array.constructors().map(nm).join(', ') + ']');
+    pr('String:', '[' + String.constructors().map(nm).join(', ') + ']');
+    pr('Object:', '[' + Object.constructors().map(nm).join(', ') + ']');
     pr('RegExp:', '[' + RegExp.constructors().map(nm).join(', ') + ']');
+    pr('Number:', '[' + Number.constructors().map(nm).join(', ') + ']');
+    pr('Boolean:', '[' + Boolean.constructors().map(nm).join(', ') + ']');
+    pr('Function:', '[' + Function.constructors().map(nm).join(', ') + ']');
 
     pr('{}:', '[' + {}.constructors().map(nm).join(', ') + ']');
     pr('[]:', '[' + [].constructors().map(nm).join(', ') + ']');
     pr('/rex/:', '[' + /rex/.constructors().map(nm).join(', ') + ']');
     pr('new Error:', '[' + new Error().constructors().map(nm).join(', ') + ']');
+    pr('new String:', '[' + new String().constructors().map(nm).join(', ') + ']');
+    pr('new Number:', '[' + new Number().constructors().map(nm).join(', ') + ']');
+    pr('new Boolean:', '[' + new Boolean().constructors().map(nm).join(', ') + ']');
+    pr('new Function:', '[' + new Function().constructors().map(nm).join(', ') + ']');
     pr('window:', '[' + (window.constructors && window.constructors().map(nm).join(', ')) + ']');
     pr('document:', '[' + (document.constructors && document.constructors().map(nm).join(', ')) + ']');
   }
@@ -68,3 +83,6 @@
 
 })(this.constructors);
 </script>
+
+</body>
+</html>
