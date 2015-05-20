@@ -45,7 +45,7 @@ this.constructors = function () {
           Object.defineProperty(ctor.prototype, 'constructors',
             {get: constructors, configurable: true});
         } catch (e) {
-          ctor.prototype.constructors = [];
+          ctor.prototype.constructors = [ctor.prototype.constructor];
         }
 
     return this;
