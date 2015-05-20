@@ -5,7 +5,13 @@ this.constructors = function () {
 
   // getProto
   var getProto = Object.getPrototypeOf ? Object.getPrototypeOf :
-    function getProto(obj) { return obj.__proto__; };
+    Object.prototype.__proto__ ?
+    function getProto(obj) { return obj.__proto__; } :
+    function getProto(obj) {
+      if (obj.constructor && obj.constructor.super_)
+        return obj.constructor.super_.prototype;
+      return obj.__proto__;
+    };
 
   // constructors
   function constructors(obj) {
@@ -16,19 +22,44 @@ this.constructors = function () {
     if (obj != null && typeof obj !== 'object' && typeof obj !== 'function')
       obj = Object(obj);
 
+    if (obj === Array) return [Array, Function.prototype];
+    if (obj === Error) return [Error, Function.prototype];
+    if (obj === RegExp) return [RegExp, Function.prototype];
+    if (obj === Object) return [Object, Function.prototype];
+    if (obj === Function) return [Function, Function.prototype];
+    if (obj.constructor === Array) return [Array, Object];
+    if (obj.constructor === Error) return [Error, Object];
+    if (obj.constructor === RegExp) return [RegExp, Object];
+    if (obj.constructor === Object) return [Object];
+
     var classes = [];
 
-    if (obj instanceof Function)
+    if (obj instanceof Function) {
       // for Class/constructor
-      for (; obj; obj = getProto(obj))
+      for (; obj; obj = ((obj.constructor && obj.constructor.super_) || getProto(obj)))
         typeof obj === 'function' &&
           classes.push(obj);
 
-    else
+      if (classes[classes.length - 1] !== Function.prototype)
+        classes.push(Function.prototype);
+    }
+    else {
+      var saveObj = obj;
+
       // for instance/object
-      for (; obj; obj = getProto(obj))
-        obj.hasOwnProperty('constructor') &&
+      for (; obj; obj = getProto(obj)) {
+        if (obj.hasOwnProperty && obj.hasOwnProperty('constructor'))
           classes.push(obj.constructor);
+        else if (obj.constructor)
+          classes.push(obj.constructor);
+      }
+
+      if (classes.length === 0 && typeof saveObj.constructor === 'function')
+        classes = [saveObj.constructor];
+
+      if (classes[classes.length - 1] !== Object)
+        classes.push(Object);
+    }
 
     return classes;
   }
@@ -37,16 +68,8 @@ this.constructors = function () {
   constructors.extendPrototype = function extendPrototype(ctor) {
     ctor = ctor || Object;
 
-    if (!ctor.prototype.hasOwnProperty('constructors'))
-      if (ctor.prototype.hasOwnProperty('__defineGetter__'))
-        ctor.prototype.__defineGetter__('constructors', constructors);
-      else if (Object.defineProperty)
-        try {
-          Object.defineProperty(ctor.prototype, 'constructors',
-            {get: constructors, configurable: true});
-        } catch (e) {
-          ctor.prototype.constructors = [ctor.prototype.constructor];
-        }
+    if (ctor.prototype.constructors !== constructors)
+      ctor.prototype.constructors = constructors;
 
     return this;
   };

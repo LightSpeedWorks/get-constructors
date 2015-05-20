@@ -1,6 +1,6 @@
 <script src="get-constructors.js"></script>
 <script>
-(function (constructor) {
+(function (constructors) {
   'use strict';
 
   // pr
@@ -12,12 +12,59 @@
       document.write(msg + '<br/>');
   }
 
+  // Array.prototype.map for ie8
+  if (!Array.prototype.hasOwnProperty('map'))
+    Array.prototype.map = function map(fn, ctx) {
+      var n = this.length, res = new Array(n);
+      for (var i = 0; i < n; ++i)
+        res[i] = fn.call(ctx, this[i], i, this);
+      return res;
+    };
+
   window.onload = function () {
+
+    try {
+      Object.name = 'Object';
+      Array.name  = 'Array';
+      Error.name  = 'Error';
+      RegExp.name = 'RegExp';
+      Function.name = 'Function';
+      Function.prototype.name = 'Empty';
+    } catch (err) {}
+
+    pr('Array:', '[' + constructors(Array).map(nm).join(', ') + ']');
+    pr('Object:', '[' + constructors(Object).map(nm).join(', ') + ']');
+    pr('Function:', '[' + constructors(Function).map(nm).join(', ') + ']');
+    pr('Error:', '[' + constructors(Error).map(nm).join(', ') + ']');
+    pr('RegExp:', '[' + constructors(RegExp).map(nm).join(', ') + ']');
+
+    pr('{}:', '[' + constructors({}).map(nm).join(', ') + ']');
+    pr('[]:', '[' + constructors([]).map(nm).join(', ') + ']');
+    pr('/rex/:', '[' + constructors(/rex/).map(nm).join(', ') + ']');
+    pr('new Error:', '[' + constructors(new Error).map(nm).join(', ') + ']');
     pr('window:', '[' + constructors(window).map(nm).join(', ') + ']');
     pr('document:', '[' + constructors(document).map(nm).join(', ') + ']');
+
+    pr();
+    constructors.extendPrototype();
+    pr('constructors.extendPrototype();');
+    pr();
+
+    pr('Array:', '[' + Array.constructors().map(nm).join(', ') + ']');
+    pr('Object:', '[' + Object.constructors().map(nm).join(', ') + ']');
+    pr('Function:', '[' + Function.constructors().map(nm).join(', ') + ']');
+    pr('Error:', '[' + Error.constructors().map(nm).join(', ') + ']');
+    pr('RegExp:', '[' + RegExp.constructors().map(nm).join(', ') + ']');
+
+    pr('{}:', '[' + {}.constructors().map(nm).join(', ') + ']');
+    pr('[]:', '[' + [].constructors().map(nm).join(', ') + ']');
+    pr('/rex/:', '[' + /rex/.constructors().map(nm).join(', ') + ']');
+    pr('new Error:', '[' + new Error().constructors().map(nm).join(', ') + ']');
+    pr('window:', '[' + (window.constructors && window.constructors().map(nm).join(', ')) + ']');
+    pr('document:', '[' + (document.constructors && document.constructors().map(nm).join(', ')) + ']');
   }
 
   function nm(x) { return x.name; }
 
-})(this.constructor);
+})(this.constructors);
 </script>

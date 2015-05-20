@@ -72,15 +72,15 @@ var constructors = require('get-constructors').extendPrototype();
 
 var FuncProto = Function.prototype;
 
-({}).constructors // -> [Object]
-Object.constructors // -> [Object, FuncProto]
+({}).constructors() // -> [Object]
+Object.constructors() // -> [Object, FuncProto]
 
-[].constructors // -> [Array, Object]
-Array.constructors // -> [Array, FuncProto]
+[].constructors() // -> [Array, Object]
+Array.constructors() // -> [Array, FuncProto]
 
 function Klass() {}
-(new Klass).constructors // -> [Klass, Object]
-Klass.constructors // -> [Klass, FuncProto]
+(new Klass).constructors() // -> [Klass, Object]
+Klass.constructors() // -> [Klass, FuncProto]
 
 var setProto = Object.setPrototypeOf ? Object.setPrototypeOf :
   function setProto(obj, proto) { obj.__proto__ = proto; };
@@ -91,11 +91,11 @@ SubKlass.prototype = Object.create(Klass.prototype, {
     writable: true, configurable: true }});
 setProto(SubKlass, Klass);
 
-(new SubKlass).constructors // -> [SubKlass, Klass, Object]
-SubKlass.constructors // -> [SubKlass, Klass, FuncProto]
+(new SubKlass).constructors() // -> [SubKlass, Klass, Object]
+SubKlass.constructors() // -> [SubKlass, Klass, FuncProto]
 ```
 
-## property: this.constructors
+## property: this.constructors()
 
   Get an array of constructor functions (classes).
   (after: constructors.extendPrototype())
@@ -105,7 +105,7 @@ SubKlass.constructors // -> [SubKlass, Klass, FuncProto]
 ```js
 var MyClass = BaseClass.extend('MyClass');
 var o1 = new MyClass();
-var classes = o1.constructors;
+var classes = o1.constructors();
 console.log(classes[0] === MyClass);   // -> true
 console.log(classes[1] === BaseClass); // -> true
 console.log(classes[2] === Object);    // -> true
@@ -115,7 +115,7 @@ console.log(classes[2] === Object);    // -> true
 
   An array of constructor functions (classes).
 
-## property: Class.constructors
+## property: Class.constructors()
 
   Get an array of constructor functions (classes).
   (after: constructors.extendPrototype())
@@ -124,7 +124,7 @@ console.log(classes[2] === Object);    // -> true
 
 ```js
 var MyClass = BaseClass.extend('MyClass');
-var classes = MyClass.constructors;
+var classes = MyClass.constructors();
 console.log(classes[0] === MyClass);   // -> true
 console.log(classes[1] === BaseClass); // -> true
 console.log(classes[2] === Object);    // -> true
