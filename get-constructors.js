@@ -51,6 +51,35 @@ this.constructors = function () {
     return this;
   };
 
+
+  // fnameRegExp: function name regular expression
+  var fnameRegExp = /^\s*function\s*\**\s*([^\(\s]*)[\S\s]+$/im;
+
+  // defProp(obj, prop, propDesc)
+  var defProp = function (obj) {
+    if (!Object.defineProperty) return null;
+    try {
+      Object.defineProperty(obj, 'prop', {value: 'str'});
+      return obj.prop === 'str' ? Object.defineProperty : null;
+    } catch (err) { return null; }
+  } ({});
+
+  // defGetter(obj, prop, getter)
+  var defGetter = 
+    Object.prototype.__defineGetter__ ?
+    function defGetter(obj, prop, getter) {
+      return obj.__defineGetter__(prop, getter); } :
+    defProp ?
+    function defGetter(obj, prop, getter) {
+      return defProp(obj, prop, {get: getter}); } :
+    function defGetter(obj, prop, getter) {};
+
+  // Function.prototype.name for ie
+  if (!Function.prototype.hasOwnProperty('name'))
+    defGetter(Function.prototype, 'name',
+      function nameOfFunction() {
+        return ('' + this).replace(fnameRegExp, '$1'); });
+
   // exports
   if (typeof module === 'object' && module.exports)
     module.exports = constructors;

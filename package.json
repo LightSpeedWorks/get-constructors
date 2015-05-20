@@ -1,6 +1,6 @@
 {
   "name": "get-constructors",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "get an array of constructors for objects and classes",
   "main": "get-constructors.js",
   "keywords": [
