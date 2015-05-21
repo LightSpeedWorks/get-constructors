@@ -20,15 +20,20 @@ this.constructors = function () {
       return obj.__proto__;
     };
 
+  function names(name, fn) {
+    if (fn.name !== name)
+      fn.name = name;
+  }
+
   try {
-    Object.name = 'Object';
-    Array.name  = 'Array';
-    Error.name  = 'Error';
-    RegExp.name = 'RegExp';
-    String.name = 'String';
-    Number.name = 'Number';
-    Boolean.name = 'Boolean';
-    Function.name = 'Function';
+    names('Object', Object);
+    names('Array', Array);
+    names('Error', Error);
+    names('RegExp', RegExp);
+    names('String', String);
+    names('Number', Number);
+    names('Boolean', Boolean);
+    names('Function', Function);
   } catch (err) {}
 
   // constructors
@@ -107,9 +112,6 @@ this.constructors = function () {
   };
 
 
-  // fnameRegExp: function name regular expression
-  var fnameRegExp = /^\s*function\s*\**\s*([^\(\s]*)[\S\s]+$/im;
-
   // defProp(obj, prop, propDesc)
   var defProp = function (obj) {
     if (!Object.defineProperty) return null;
@@ -120,14 +122,16 @@ this.constructors = function () {
   } ({});
 
   // defGetter(obj, prop, getter)
-  var defGetter = 
+  var defGetter = defProp ?
+    function defGetter(obj, prop, getter) {
+      return defProp(obj, prop, {get: getter}); } :
     Object.prototype.__defineGetter__ ?
     function defGetter(obj, prop, getter) {
       return obj.__defineGetter__(prop, getter); } :
-    defProp ?
-    function defGetter(obj, prop, getter) {
-      return defProp(obj, prop, {get: getter}); } :
     function defGetter(obj, prop, getter) {};
+
+  // fnameRegExp: function name regular expression
+  var fnameRegExp = /^\s*function\s*\**\s*([^\(\s]*)[\S\s]+$/im;
 
   // Function.prototype.name for ie
   if (!Function.prototype.hasOwnProperty('name'))
