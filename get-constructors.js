@@ -3,7 +3,25 @@
 this.constructors = function () {
   'use strict';
 
-  // getProto
+  try {
+    names('Object', Object);
+    names('Array', Array);
+    names('Error', Error);
+    names('RegExp', RegExp);
+    names('String', String);
+    names('Number', Number);
+    names('Boolean', Boolean);
+    names('Function', Function);
+    names('Empty', Function.prototype);
+  } catch (err) {}
+
+  // names(name, fn)
+  function names(name, fn) {
+    if (fn.name !== name)
+      fn.name = name;
+  }
+
+  // getProto(obj)
   var getProto = Object.getPrototypeOf ? Object.getPrototypeOf :
     Object.prototype.__proto__ ?
     function getProto(obj) { return obj.__proto__; } :
@@ -20,23 +38,7 @@ this.constructors = function () {
       return obj.__proto__;
     };
 
-  function names(name, fn) {
-    if (fn.name !== name)
-      fn.name = name;
-  }
-
-  try {
-    names('Object', Object);
-    names('Array', Array);
-    names('Error', Error);
-    names('RegExp', RegExp);
-    names('String', String);
-    names('Number', Number);
-    names('Boolean', Boolean);
-    names('Function', Function);
-  } catch (err) {}
-
-  // constructors
+  // constructors([obj])
   function constructors(obj) {
     // supports: getter and normal function
     if (arguments.length === 0) obj = this;
@@ -101,7 +103,7 @@ this.constructors = function () {
     return classes;
   }
 
-  // extendPrototype
+  // extendPrototype([ctor])
   constructors.extendPrototype = function extendPrototype(ctor) {
     ctor = ctor || Object;
 
@@ -137,9 +139,11 @@ this.constructors = function () {
   if (!Function.prototype.hasOwnProperty('name'))
     defGetter(Function.prototype, 'name',
       function nameOfFunction() {
-        return ('' + this).replace(fnameRegExp, '$1'); });
+        return ('' + this).replace(fnameRegExp, '$1') || undefined; });
 
-  // exports
+  constructors.constructors = constructors;
+
+  // module.exports
   if (typeof module === 'object' && module.exports)
     module.exports = constructors;
 
