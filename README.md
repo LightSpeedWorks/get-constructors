@@ -3,6 +3,8 @@
 
   get an array of constructors (classes) for objects and classes.
 
+  supports Google Chrome, Mozilla Firefox, Microsoft ie11/10/9/8/7/6 and Node.js/io.js.
+
 [Japanese version/■日本語版はこちら■](README-JP.md#readme)
 
 # INSTALL:

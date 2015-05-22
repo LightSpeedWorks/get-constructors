@@ -5,6 +5,8 @@
 
   オブジェクトやクラスのコンストラクタ配列(クラス一覧)を取得する。
 
+  Google Chrome, Mozilla Firefox, Microsoft ie11/10/9/8/7/6 や Node.js/io.js をサポートします。
+
 # インストール:
 
 ```bash
