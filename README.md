@@ -37,7 +37,7 @@ var constructors = this.constructors || require('get-constructors'));
 
 # USAGE:
 
-## constructors
+## function: constructors(object or Class/constructor)
 
 ```js
 var constructors = require('get-constructors');
@@ -67,7 +67,11 @@ constructors(new SubKlass); // -> [SubKlass, Klass, Object]
 constructors(SubKlass); // -> [SubKlass, Klass, FuncProto]
 ```
 
-## constructors.extendPrototype([ctor = Object])
+## method: constructors.extendPrototype([ctor = Object])
+
+  Extends prototype method `constructors` and returns `constructors`.
+
+### Format
 
 ```js
 var constructors = require('get-constructors').extendPrototype();
@@ -97,7 +101,7 @@ setProto(SubKlass, Klass);
 SubKlass.constructors() // -> [SubKlass, Klass, FuncProto]
 ```
 
-## property: this.constructors()
+## method: this.constructors()
 
   Get an array of constructor functions (classes).
   (after: constructors.extendPrototype())
@@ -105,9 +109,25 @@ SubKlass.constructors() // -> [SubKlass, Klass, FuncProto]
 ### Format
 
 ```js
-var MyClass = BaseClass.extend('MyClass');
+var constructors = require('get-constructors').extendPrototype();
+
+function BaseClass() {}
+function MyClass() {}
+MyClass.prototype = new BaseClass()
+MyClass.prototype.constructor = MyClass;
+
 var o1 = new MyClass();
+console.log(o1.constructor === MyClass);   // -> true
+
 var classes = o1.constructors();
+console.log(classes[0] === MyClass);   // -> true
+console.log(classes[1] === BaseClass); // -> true
+console.log(classes[2] === Object);    // -> true
+
+BaseClass.super_ = Object;
+MyClass.super_ = BaseClass;
+
+var classes = MyClass.constructors();
 console.log(classes[0] === MyClass);   // -> true
 console.log(classes[1] === BaseClass); // -> true
 console.log(classes[2] === Object);    // -> true
@@ -117,7 +137,7 @@ console.log(classes[2] === Object);    // -> true
 
   An array of constructor functions (classes).
 
-## property: Class.constructors()
+## method: Class.constructors()
 
   Get an array of constructor functions (classes).
   (after: constructors.extendPrototype())
