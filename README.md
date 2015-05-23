@@ -144,6 +144,10 @@ console.log(classes[2] === Function.prototype); // -> true
 
   An array of constructor functions (classes).
 
+# SEE ALSO:
+
+## [base-class-extend](https://www.npmjs.org/package/base-class-extend) - npm
+
 # LICENSE:
 
   MIT License

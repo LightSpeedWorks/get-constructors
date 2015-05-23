@@ -144,6 +144,10 @@ console.log(classes[2] === Function.prototype);    // -> true
 
   コンストラクタ関数(クラス)の配列。
 
+# 参考:
+
+## [base-class-extend](https://www.npmjs.org/package/base-class-extend) - npm
+
 # ライセンス:
 
   MITライセンス
