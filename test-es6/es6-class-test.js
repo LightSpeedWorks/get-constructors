@@ -90,6 +90,11 @@
   SubSubClass6.staticMethod();
   console.log();
 
-  function nm(x) { return x.name; }
+  // nm(x)
+  function nm(x) {
+    var name = (x.hasOwnProperty && x.hasOwnProperty('name')) ?
+        (x.name || 'undefined') : (x.name || 'undefined') + '(default)';
+    return name;
+  }
 
 })();
