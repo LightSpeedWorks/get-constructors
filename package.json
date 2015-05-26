@@ -7,6 +7,7 @@
     "constructors"
   ],
   "devDependencies": {
+    "base-class-extend": ">=0.0.19",
     "mocha": ">=2.2.5"
   },
   "repository": {
