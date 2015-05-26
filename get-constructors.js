@@ -55,13 +55,13 @@ this.constructors = function () {
     if (obj === Number) return [Number, Function.prototype];
     if (obj === Boolean) return [Boolean, Function.prototype];
     if (obj === Function) return [Function, Function.prototype];
-    if (obj.constructor === Array) return [Array, Object];
-    if (obj.constructor === Error) return [Error, Object];
-    if (obj.constructor === RegExp) return [RegExp, Object];
-    if (obj.constructor === Object) return [Object];
-    if (obj.constructor === String) return [String, Object];
-    if (obj.constructor === Number) return [Number, Object];
-    if (obj.constructor === Boolean) return [Boolean, Object];
+    if (obj && obj.constructor === Array) return [Array, Object];
+    if (obj && obj.constructor === Error) return [Error, Object];
+    if (obj && obj.constructor === RegExp) return [RegExp, Object];
+    if (obj && obj.constructor === Object) return [Object];
+    if (obj && obj.constructor === String) return [String, Object];
+    if (obj && obj.constructor === Number) return [Number, Object];
+    if (obj && obj.constructor === Boolean) return [Boolean, Object];
 
     var classes = [];
 
@@ -92,7 +92,7 @@ this.constructors = function () {
       }
 
       if (classes.length === 0 &&
-          typeof saveObj.constructor === 'function')
+          saveObj && typeof saveObj.constructor === 'function')
         classes = [saveObj.constructor];
 
       if (classes.length === 0 ||
