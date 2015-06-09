@@ -43,8 +43,10 @@ this.constructors = function () {
     // supports: getter and normal function
     if (arguments.length === 0) obj = this;
 
+    if (obj == null) return [];
+
     // convert to object from primitives
-    if (obj != null && typeof obj !== 'object' && typeof obj !== 'function')
+    if (typeof obj !== 'object' && typeof obj !== 'function')
       obj = Object(obj);
 
     if (obj === Array) return [Array, Function.prototype];
@@ -55,19 +57,19 @@ this.constructors = function () {
     if (obj === Number) return [Number, Function.prototype];
     if (obj === Boolean) return [Boolean, Function.prototype];
     if (obj === Function) return [Function, Function.prototype];
-    if (obj && obj.constructor === Array) return [Array, Object];
-    if (obj && obj.constructor === Error) return [Error, Object];
-    if (obj && obj.constructor === RegExp) return [RegExp, Object];
-    if (obj && obj.constructor === Object) return [Object];
-    if (obj && obj.constructor === String) return [String, Object];
-    if (obj && obj.constructor === Number) return [Number, Object];
-    if (obj && obj.constructor === Boolean) return [Boolean, Object];
+    if (obj.constructor === Array) return [Array, Object];
+    if (obj.constructor === Error) return [Error, Object];
+    if (obj.constructor === RegExp) return [RegExp, Object];
+    if (obj.constructor === Object) return [Object];
+    if (obj.constructor === String) return [String, Object];
+    if (obj.constructor === Number) return [Number, Object];
+    if (obj.constructor === Boolean) return [Boolean, Object];
 
     var classes = [];
 
     if (obj instanceof Function) {
       // for Class/constructor
-      for (; obj; obj = (obj['super'] || obj.super_ || getProto(obj)))
+      for (; obj; obj = (obj.super_ || obj['super'] || getProto(obj)))
         if (typeof obj === 'function')
           classes.push(obj);
 
