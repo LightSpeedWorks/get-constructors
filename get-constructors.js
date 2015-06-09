@@ -3,22 +3,22 @@
 this.constructors = function () {
   'use strict';
 
-  try {
-    names('Object', Object);
-    names('Array', Array);
-    names('Error', Error);
-    names('RegExp', RegExp);
-    names('String', String);
-    names('Number', Number);
-    names('Boolean', Boolean);
-    names('Function', Function);
-    names('Empty', Function.prototype);
-  } catch (err) {}
+  names('Object', Object);
+  names('Array', Array);
+  names('Error', Error);
+  names('RegExp', RegExp);
+  names('String', String);
+  names('Number', Number);
+  names('Boolean', Boolean);
+  names('Function', Function);
+  names('Empty', Function.prototype);
 
   // names(name, fn)
   function names(name, fn) {
-    if (fn.name !== name)
-      fn.name = name;
+    try {
+      if (fn.name !== name)
+        fn.name = name;
+    } catch (err) {}
   }
 
   // getProto(obj)
