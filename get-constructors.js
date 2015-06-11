@@ -1,7 +1,23 @@
 // get-constructors.js
 
-this.constructors = function () {
+this.constructors = function ($debug) {
   'use strict';
+
+  // $pr(msgs...)
+  var $pr = $debug ?
+  function $pr() {
+    var msg = 'get-constructor: ' + [].slice.call(arguments).join(' ');
+    setTimeout(function () {
+      if (typeof console !== 'undefined')
+        console.log(msg);
+      if (typeof document !== 'undefined')
+        document.writeln(msg + '<br/>\n');
+    }, 1000);
+  } :
+  function $pr() {
+  };
+
+  $pr('debug mode');
 
   names('Object', Object);
   names('Array', Array);
@@ -19,6 +35,7 @@ this.constructors = function () {
       if (fn.name !== name)
         fn.name = name;
     } catch (err) {}
+    $pr('names(' + name + ', ' + fn.name + ')');
   }
 
   // getProto(obj)
@@ -34,6 +51,8 @@ this.constructors = function () {
           return ctor.super_.prototype;
         if (typeof ctor['super'] === 'function')
           return ctor['super'].prototype;
+        if (ctor === Object) return null;
+        return Object.prototype;
       }
       return obj.__proto__;
     };
@@ -151,4 +170,4 @@ this.constructors = function () {
 
   return constructors;
 
-}();
+}(this.$debug);
