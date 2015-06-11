@@ -21,12 +21,15 @@
   var FuncProto = Function.prototype;
 
   // class Klass
-  function Klass1() {}
+  function Klass1() {
+    if (!(this instanceof Klass1)) return new Klass1();
+  }
 
   // class SubKlass extends Klass
   util.inherits(SubKlass1, Klass1);
   setProto(SubKlass1, Klass1);
   function SubKlass1() {
+    if (!(this instanceof SubKlass1)) return new SubKlass1();
     Klass1.apply(this, arguments);
   }
 
@@ -273,12 +276,28 @@
         assert.deepEqual(constructors.call(new Klass()), expected);
       });
 
+      prefixMessage !== '(ES6 class) ' && Klass &&
+      it('Klass().constructors() -> [Klass, Object]', function () {
+        var expected = [Klass, Object];
+        assert.deepEqual(Klass().constructors(), expected);
+        assert.deepEqual(constructors(Klass()), expected);
+        assert.deepEqual(constructors.call(Klass()), expected);
+      });
+
       SubKlass && Klass &&
       it('new SubKlass().constructors() -> [SubKlass, Klass, Object]', function () {
         var expected = [SubKlass, Klass, Object];
         assert.deepEqual(new SubKlass().constructors(), expected);
         assert.deepEqual(constructors(new SubKlass()), expected);
         assert.deepEqual(constructors.call(new SubKlass()), expected);
+      });
+
+      prefixMessage !== '(ES6 class) ' && SubKlass && Klass &&
+      it('SubKlass().constructors() -> [SubKlass, Klass, Object]', function () {
+        var expected = [SubKlass, Klass, Object];
+        assert.deepEqual(SubKlass().constructors(), expected);
+        assert.deepEqual(constructors(SubKlass()), expected);
+        assert.deepEqual(constructors.call(SubKlass()), expected);
       });
 
       CustomArray &&
@@ -400,5 +419,28 @@
       it('harmony classes not supported: ' + RED + e, function () {});
     });
   }
+
+  var extend = require('base-class-extend').extend;
+
+  var Klass3 = extend('Klass3');
+  var SubKlass3 = Klass3.extend('SubKlass3');
+  var CustomArray3 = extend.call(Array, 'CustomArray3');
+  var CustomError3 = extend.call(Error, 'CustomError3');
+
+  doTest('(base-class-extend Klass3) ', Klass3, SubKlass3, CustomArray3);
+
+  var Klass4 = extend('Klass4', {
+    constructor: function () {
+      if (!(this instanceof Klass4)) return new Klass4();
+    }
+  });
+  var SubKlass4 = Klass4.extend('SubKlass4', {
+    constructor: function () {
+      if (!(this instanceof Klass4)) return new SubKlass4();
+      Klass4.call(this);
+    }
+  });
+
+  doTest('(base-class-extend Klass4) ', Klass4, SubKlass4);
 
 })();
