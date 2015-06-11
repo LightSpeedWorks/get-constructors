@@ -30,10 +30,10 @@ this.constructors = function () {
       if (typeof ctor === 'function') {
         if (ctor.prototype !== obj)
           return ctor.prototype;
-        if (typeof ctor['super'] === 'function')
-          return ctor['super'].prototype;
         if (typeof ctor.super_ === 'function')
           return ctor.super_.prototype;
+        if (typeof ctor['super'] === 'function')
+          return ctor['super'].prototype;
       }
       return obj.__proto__;
     };
