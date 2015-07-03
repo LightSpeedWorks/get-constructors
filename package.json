@@ -1,13 +1,13 @@
 {
   "name": "get-constructors",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "get an array of constructors for objects and classes",
   "main": "get-constructors.js",
   "keywords": [
     "constructors"
   ],
   "devDependencies": {
-    "base-class-extend": ">=0.0.19",
+    "base-class-extend": ">=0.0.20",
     "mocha": ">=2.2.5"
   },
   "repository": {
