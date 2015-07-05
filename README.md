@@ -9,6 +9,9 @@
 
 # INSTALL:
 
+[![NPM](https://nodei.co/npm/get-constructors.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/get-constructors/)
+[![NPM](https://nodei.co/npm-dl/get-constructors.png?height=2)](https://nodei.co/npm/get-constructors/)
+
 ```bash
 $ npm install get-constructors --save
 ```
